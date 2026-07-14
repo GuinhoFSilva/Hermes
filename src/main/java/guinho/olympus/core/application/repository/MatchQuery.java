@@ -8,9 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface MatchQuery {
-    List<Match> findAll();
-
     Optional<Match> findById(UUID id);
 
-    Optional<Match> findByPlayerId(PlayerId playerId);
+    List<Match> findByPlayerId(PlayerId playerId);
 }

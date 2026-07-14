@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface QueueService {
     Optional<Participants> joinQueue(PlayerId playerId);
+    void leaveQueue(PlayerId playerId);
 }
