@@ -10,7 +10,9 @@ public class MatchMapper {
             return null;
         }
 
-        return new MatchResponseDto(entity.getId(), entity.getParticipants(), entity.getStatus(), entity.getCreatedAt(), entity.getEndAt());
+        ParticipantsResponseDto participantsResponse = new ParticipantsResponseDto(entity.getParticipants().getFirst().getValue(), entity.getParticipants().getSecond().getValue());
+
+        return new MatchResponseDto(entity.getId(), participantsResponse, entity.getStatus(), entity.getCreatedAt(), entity.getEndAt());
     }
 
     public static List<MatchResponseDto> toResponse(List<Match> entities) {

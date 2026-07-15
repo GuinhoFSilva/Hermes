@@ -35,6 +35,14 @@ public class Participants {
         throw new InvalidArgumentException("Player is not a participant");
     }
 
+    public PlayerId getFirst() {
+        return first;
+    }
+
+    public PlayerId getSecond() {
+        return second;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
