@@ -6,6 +6,7 @@ import guinho.olympus.core.application.usecase.match.shared.ResourceNotFoundExce
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
 import guinho.olympus.core.domain.shared.MatchAlreadyFinishedException;
 import guinho.olympus.core.domain.shared.UnchangedFieldException;
+import guinho.olympus.infrastructure.persistence.exceptions.CorruptedDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -34,6 +35,13 @@ public class RestAdvice {
         var error = ApiError.of(ex.getMessage(), HttpStatus.CONFLICT.value());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(CorruptedDataException.class)
+    public ResponseEntity<ApiError> handleCorruptedData(CorruptedDataException ex) {
+        var error = ApiError.of(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
     @ExceptionHandler(InvalidArgumentException.class)
@@ -78,6 +86,8 @@ public class RestAdvice {
         ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+
+
 
 
 }
