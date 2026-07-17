@@ -1,4 +1,4 @@
-package guinho.olympus.core.domain.shared;
+package guinho.olympus.core.application.usecase.match.shared;
 
 public class PlayerNotInQueueException extends RuntimeException {
     public PlayerNotInQueueException() {

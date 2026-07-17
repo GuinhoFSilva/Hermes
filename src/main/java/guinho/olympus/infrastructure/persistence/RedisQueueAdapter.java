@@ -3,7 +3,7 @@ package guinho.olympus.infrastructure.persistence;
 import guinho.olympus.core.application.abstractions.QueueService;
 import guinho.olympus.core.domain.match.valueobject.Participants;
 import guinho.olympus.core.domain.match.valueobject.PlayerId;
-import guinho.olympus.core.domain.shared.PlayerNotInQueueException;
+import guinho.olympus.core.application.usecase.match.shared.PlayerNotInQueueException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
