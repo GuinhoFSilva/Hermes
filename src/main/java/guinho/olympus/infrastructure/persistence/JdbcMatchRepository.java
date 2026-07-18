@@ -88,13 +88,13 @@ public class JdbcMatchRepository implements MatchQuery, MatchMutation {
     }
 
     private Participants getParticipants(UUID matchId) {
-        List<PlayerId> playerIds = jdbcTemplate.queryForList("SELECT id_player FROM participants WHERE id_match = ?", PlayerId.class, matchId.toString());
+        List<UUID> playerIds = jdbcTemplate.queryForList("SELECT id_player FROM participants WHERE id_match = ?", UUID.class, matchId.toString());
 
-        if (playerIds.isEmpty()) {
+        if (playerIds.isEmpty() || playerIds.size() < 2) {
             throw new CorruptedDataException("Match exists but no valid participants were found");
         }
 
-        return Participants.of(playerIds.getFirst(), playerIds.getLast());
+        return Participants.of(PlayerId.of(playerIds.getFirst()), PlayerId.of(playerIds.getLast()));
     }
 
 }
