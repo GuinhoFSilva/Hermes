@@ -1,4 +1,4 @@
-package guinho.olympus.core.integration;
+package guinho.olympus.infrastructure.integration;
 
 import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -25,5 +25,13 @@ public class IntegrationTestContainers implements BeforeAllCallback {
             REDIS_CONTAINER.start();
             CONTAINERS_STARTED.set(true);
         }
+    }
+
+    public static String getHost() {
+        return REDIS_CONTAINER.getHost();
+    }
+
+    public static Integer getPort() {
+        return REDIS_CONTAINER.getFirstMappedPort();
     }
 }

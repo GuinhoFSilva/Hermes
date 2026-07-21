@@ -1,4 +1,4 @@
-package guinho.olympus.core.integration;
+package guinho.olympus.infrastructure.integration;
 
 import guinho.olympus.HermesApplication;
 import org.junit.jupiter.api.extension.ExtendWith;

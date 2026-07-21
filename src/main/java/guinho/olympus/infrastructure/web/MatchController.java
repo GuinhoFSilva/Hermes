@@ -31,7 +31,9 @@ public class MatchController {
 
     @GetMapping("/me")
     public ResponseEntity<List<MatchResponseDto>> getPlayerMatches(JwtAuthenticationToken token) {
-        return ResponseEntity.ok().body(getPlayerMatchesUseCase.findMatches(token.getToken().getTokenValue()));
+        List<MatchResponseDto> matches = getPlayerMatchesUseCase.findMatches(token.getToken().getTokenValue());
+        if(matches.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(matches);
     }
 
     @GetMapping("/{id}")
