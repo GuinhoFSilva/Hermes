@@ -240,3 +240,13 @@ Objetivo: Retornar informações de todas as partidas de um jogador específico.
 *Regras de Negócio:*
 - As partidas retornadas devem corresponder às partidas do jogador autenticado;
 - Um jogador não pode consultar todas as partidas de outro jogador;
+
+---
+
+# Roadmap V2
+- Resolver N + 1 do Select (findByPlayerId);
+- Remover o parsing manual do JWT (JwtTokenExtractor);
+- Utilizar o SecurityContext do Spring Security para obter o usuário autenticado;
+- Utiliza DI do Spring na configuração da SecretKey;
+- Algoritmo de matchmaking baseado em rank;
+- Garantir atomicidade nas operações do Redis; 
