@@ -1,6 +1,7 @@
 package guinho.olympus.infrastructure.security;
 
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -19,7 +20,8 @@ import java.nio.charset.StandardCharsets;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String jwtSecret = System.getenv("JWT_SECRET");
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
