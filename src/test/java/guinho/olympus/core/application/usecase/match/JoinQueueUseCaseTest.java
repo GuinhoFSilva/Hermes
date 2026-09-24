@@ -1,7 +1,6 @@
 package guinho.olympus.core.application.usecase.match;
 
 import guinho.olympus.core.application.abstractions.QueueService;
-import guinho.olympus.core.application.abstractions.TokenExtractor;
 import guinho.olympus.core.application.repository.MatchMutation;
 import guinho.olympus.core.application.usecase.match.dto.JoinQueueResult;
 import guinho.olympus.core.domain.match.Match;
@@ -28,9 +27,6 @@ class JoinQueueUseCaseTest {
     @Mock
     private MatchMutation matchMutation;
 
-    @Mock
-    private TokenExtractor tokenExtractor;
-
     @InjectMocks
     private JoinQueueUseCase joinQueueUseCase;
 
@@ -41,16 +37,14 @@ class JoinQueueUseCaseTest {
             PlayerId playerId = PlayerId.of(UUID.randomUUID());
             PlayerId anotherPlayerId = PlayerId.of(UUID.randomUUID());
             Participants participants = Participants.of(anotherPlayerId, playerId);
-            String token = "Bearer Token";
+            String token = playerId.getValue().toString();
 
-            Mockito.when(tokenExtractor.extractPlayerId(token)).thenReturn(playerId);
             Mockito.when(queueService.joinQueue(playerId)).thenReturn(Optional.of(participants));
             Mockito.when(matchMutation.save(Mockito.any(Match.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
             JoinQueueResult result = joinQueueUseCase.execute(token);
 
             assertTrue(result.hasMatch());
-            Mockito.verify(tokenExtractor).extractPlayerId(token);
             Mockito.verify(queueService).joinQueue(playerId);
             Mockito.verify(matchMutation).save(Mockito.any(Match.class));
         }
@@ -58,15 +52,13 @@ class JoinQueueUseCaseTest {
         @Test
         public void shouldJoinQueueWithoutCreatingMatchWhenNoOpponentIsAvailable() {
             PlayerId playerId = PlayerId.of(UUID.randomUUID());
-            String token = "Bearer Token";
+            String token = playerId.getValue().toString();
 
-            Mockito.when(tokenExtractor.extractPlayerId(token)).thenReturn(playerId);
             Mockito.when(queueService.joinQueue(playerId)).thenReturn(Optional.empty());
 
             JoinQueueResult result = joinQueueUseCase.execute(token);
 
             assertFalse(result.hasMatch());
-            Mockito.verify(tokenExtractor).extractPlayerId(token);
             Mockito.verify(queueService).joinQueue(playerId);
             Mockito.verifyNoInteractions(matchMutation);
         }

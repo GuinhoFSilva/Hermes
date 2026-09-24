@@ -1,7 +1,6 @@
 package guinho.olympus.infrastructure.beans_config;
 
 import guinho.olympus.core.application.abstractions.QueueService;
-import guinho.olympus.core.application.abstractions.TokenExtractor;
 import guinho.olympus.core.application.repository.MatchMutation;
 import guinho.olympus.core.application.repository.MatchQuery;
 import guinho.olympus.core.application.usecase.match.GetMatchUseCase;
@@ -14,23 +13,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MatchBeanConfig {
     @Bean
-    public GetMatchUseCase getMatchUseCase(TokenExtractor tokenExtractor, MatchQuery matchQuery) {
-        return new GetMatchUseCase(tokenExtractor, matchQuery);
+    public GetMatchUseCase getMatchUseCase(MatchQuery matchQuery) {
+        return new GetMatchUseCase(matchQuery);
     }
 
     @Bean
-    public GetPlayerMatchesUseCase getPlayerMatchesUseCase(TokenExtractor tokenExtractor, MatchQuery matchQuery) {
-        return new GetPlayerMatchesUseCase(tokenExtractor, matchQuery);
+    public GetPlayerMatchesUseCase getPlayerMatchesUseCase(MatchQuery matchQuery) {
+        return new GetPlayerMatchesUseCase(matchQuery);
     }
 
     @Bean
-    public JoinQueueUseCase joinQueueUseCase(TokenExtractor tokenExtractor, QueueService queueService, MatchMutation matchMutation) {
-        return new JoinQueueUseCase(tokenExtractor, queueService, matchMutation);
+    public JoinQueueUseCase joinQueueUseCase(QueueService queueService, MatchMutation matchMutation) {
+        return new JoinQueueUseCase(queueService, matchMutation);
     }
 
     @Bean
-    public LeaveQueueUseCase leaveQueueUseCase(TokenExtractor tokenExtractor, QueueService queueService) {
-        return new LeaveQueueUseCase(tokenExtractor, queueService);
+    public LeaveQueueUseCase leaveQueueUseCase(QueueService queueService) {
+        return new LeaveQueueUseCase(queueService);
     }
 
 }

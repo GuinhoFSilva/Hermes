@@ -1,8 +1,6 @@
 package guinho.olympus.core.application.usecase.match;
 
-import guinho.olympus.core.application.abstractions.TokenExtractor;
 import guinho.olympus.core.application.repository.MatchQuery;
-import guinho.olympus.core.application.usecase.match.dto.MatchMapper;
 import guinho.olympus.core.application.usecase.match.dto.MatchResponseDto;
 import guinho.olympus.core.domain.match.Match;
 import guinho.olympus.core.domain.match.enums.Status;
@@ -27,9 +25,6 @@ class GetPlayerMatchesUseCaseTest {
     @Mock
     private MatchQuery matchQuery;
 
-    @Mock
-    private TokenExtractor tokenExtractor;
-
     @InjectMocks
     private GetPlayerMatchesUseCase getPlayerMatchesUseCase;
 
@@ -43,9 +38,7 @@ class GetPlayerMatchesUseCaseTest {
             Participants participants = Participants.of(playerOne, playerTwo);
             Match match = Match.reconstitute(matchId, participants, Status.FINISHED, LocalDateTime.now(), LocalDateTime.now());
             List<Match> matches = List.of(match);
-            String token = "Bearer token";
-
-            Mockito.when(tokenExtractor.extractPlayerId(token)).thenReturn(playerOne);
+            String token = playerOne.getValue().toString();
 
             Mockito.when(matchQuery.findByPlayerId(playerOne)).thenReturn(matches);
 
@@ -54,7 +47,6 @@ class GetPlayerMatchesUseCaseTest {
             assertEquals(matches.getFirst().getId(), response.getFirst().matchId());
             assertTrue(matches.getFirst().getParticipants().contains(playerOne));
             assertTrue(matches.getFirst().getParticipants().contains(playerTwo));
-            Mockito.verify(tokenExtractor).extractPlayerId(token);
             Mockito.verify(matchQuery).findByPlayerId(playerOne);
         }
     }

@@ -31,19 +31,19 @@ public class MatchController {
 
     @GetMapping("/me")
     public ResponseEntity<List<MatchResponseDto>> getPlayerMatches(JwtAuthenticationToken token) {
-        List<MatchResponseDto> matches = getPlayerMatchesUseCase.findMatches(token.getToken().getTokenValue());
+        List<MatchResponseDto> matches = getPlayerMatchesUseCase.findMatches(token.getToken().getSubject());
         if(matches.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok().body(matches);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MatchResponseDto> getMatch(JwtAuthenticationToken token, @PathVariable UUID id) {
-        return ResponseEntity.ok().body(getMatchUseCase.find(token.getToken().getTokenValue(), id));
+        return ResponseEntity.ok().body(getMatchUseCase.find(token.getToken().getSubject(), id));
     }
 
     @PostMapping("/queue")
     public ResponseEntity<JoinQueueResult> joinQueue(JwtAuthenticationToken token) {
-        JoinQueueResult response = joinQueueUseCase.execute(token.getToken().getTokenValue());
+        JoinQueueResult response = joinQueueUseCase.execute(token.getToken().getSubject());
 
         HttpStatus status = HttpStatus.OK;
 
@@ -54,7 +54,7 @@ public class MatchController {
 
     @DeleteMapping("/queue")
     public ResponseEntity<Void> leaveQueue(JwtAuthenticationToken token) {
-        leaveQueueUseCase.execute(token.getToken().getTokenValue());
+        leaveQueueUseCase.execute(token.getToken().getSubject());
         return ResponseEntity.noContent().build();
     }
 }
