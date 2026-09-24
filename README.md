@@ -105,8 +105,8 @@ O projeto possui:
 |--------|----------|-----------|-----------|
 | GET    | /v1/matches/{id} |  ✅ | Retornar uma única partida
 | GET    | /v1/matches/me |  ✅ | Retornar Todas as Partidas de um jogador
-| POST   | /v1/match/queue |  ✅ | Entrar em uma fila
-| DELETE   | /v1/match/queue    |  ✅ | Sair de uma fila
+| POST   | /v1/matches/queue |  ✅ | Entrar em uma fila
+| DELETE   | /v1/matches/queue    |  ✅ | Sair de uma fila
 
 ---
 
@@ -135,7 +135,7 @@ O projeto possui:
 # Casos de Uso
 > Nota: Esses são os casos de uso referentes à versão 1 do projeto.
 
-###### **JoinQueue**
+## JoinQueue
 Objetivo: Colocar o jogador em uma fila de espera;
 
 *Entrada:*
@@ -161,7 +161,7 @@ Objetivo: Colocar o jogador em uma fila de espera;
 - O jogador precisa estar autenticado no sistema;
 - Se a fila conter dois jogadores válidos, uma partida é criada e persistida;
 
-###### **LeaveQueue**
+## LeaveQueue
 Objetivo: Tirar o jogador de uma fila;
 
 *Entrada:*
@@ -185,7 +185,7 @@ Objetivo: Tirar o jogador de uma fila;
 - O jogador deve estar em uma fila;
 
 
-###### **GetMatch**
+## GetMatch
 Objetivo: Retornar informações de uma partida específica.
 
 *Entrada:
@@ -217,7 +217,7 @@ Objetivo: Retornar informações de uma partida específica.
 - A partida retornada deve corresponder à partida dona do Id;
 - A partida deve estar relacionada ao jogador autenticado;
 
-###### **GetPlayerMatches**
+## GetPlayerMatches
 Objetivo: Retornar informações de todas as partidas de um jogador específico.
 
 *Entrada:
