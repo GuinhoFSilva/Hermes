@@ -245,8 +245,6 @@ Objetivo: Retornar informações de todas as partidas de um jogador específico.
 
 # Roadmap V2
 - Resolver N + 1 do Select (findByPlayerId);
-- Remover o parsing manual do JWT (JwtTokenExtractor);
-- Utilizar o SecurityContext do Spring Security para obter o usuário autenticado;
+- Remover o parsing manual do JWT (JwtTokenExtractor); ✅
 - Utiliza DI do Spring na configuração da SecretKey;
-- Algoritmo de matchmaking baseado em rank;
 - Garantir atomicidade nas operações do Redis; 
