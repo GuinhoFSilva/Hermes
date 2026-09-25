@@ -4,9 +4,12 @@ import guinho.olympus.core.application.abstractions.QueueService;
 import guinho.olympus.core.domain.match.valueobject.Participants;
 import guinho.olympus.core.domain.match.valueobject.PlayerId;
 import guinho.olympus.core.application.usecase.match.shared.PlayerNotInQueueException;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,32 +17,37 @@ import java.util.UUID;
 public class RedisQueueAdapter implements QueueService {
     private final RedisTemplate<String, String> redisTemplate;
     private static final String QUEUE_KEY = "matchmaking";
+    private final RedisScript<List> script;
+    private final RedisOperations<String, String> redisOperations;
 
-    public RedisQueueAdapter(RedisTemplate<String, String> redisTemplate) {
+
+    public RedisQueueAdapter(RedisTemplate<String, String> redisTemplate, RedisScript<List> script, RedisOperations<String, String> redisOperations) {
         this.redisTemplate = redisTemplate;
+        this.script = script;
+        this.redisOperations = redisOperations;
     }
 
     @Override
     public Optional<Participants> joinQueue(PlayerId playerId) {
-        String playerIdOnQueue = redisTemplate.opsForList().leftPop(QUEUE_KEY);
+        List<String> players = redisOperations.execute(script, List.of(QUEUE_KEY), playerId.getValue().toString());
 
-        if (playerIdOnQueue == null) {
-            redisTemplate.opsForList().rightPush(QUEUE_KEY, playerId.getValue().toString());
+        if (players == null || players.size() != 2) {
             return Optional.empty();
         }
 
-        PlayerId playerOnQueue = PlayerId.of(UUID.fromString(playerIdOnQueue));
-
-        Participants participants = Participants.of(playerOnQueue, playerId);
-
-        return Optional.of(participants);
+        return Optional.of(
+                Participants.of(
+                        PlayerId.of(UUID.fromString(players.getFirst())),
+                        PlayerId.of(UUID.fromString(players.getLast()))
+                )
+        );
     }
 
     @Override
     public void leaveQueue(PlayerId playerId) {
         Long remove = redisTemplate.opsForList().remove(QUEUE_KEY, 1, playerId.getValue().toString());
 
-        if(remove == 0){
+        if (remove == 0) {
             throw new PlayerNotInQueueException();
         }
     }
