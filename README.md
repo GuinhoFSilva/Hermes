@@ -15,7 +15,7 @@
 
 
 > O **Hermes Matchmaking (V1)** é o microsserviço de matchmaking do ecossistema Olympus.
-> Nesta primeira versão, recebe os jogadores em uma fila de espera e os agrupa automaticamente em partidas quando existem jogadores suficientes.
+> Nesta versão, recebe os jogadores em uma fila de espera e os agrupa automaticamente em partidas quando existem jogadores suficientes.
 
 ## Features
 
@@ -103,10 +103,10 @@ O projeto possui:
 ### Endpoints
 |Método |Endpoint |Auth |Descrição
 |--------|----------|-----------|-----------|
-| GET    | /v1/matches/{id} |  ✅ | Retornar uma única partida
-| GET    | /v1/matches/me |  ✅ | Retornar Todas as Partidas de um jogador
-| POST   | /v1/matches/queue |  ✅ | Entrar em uma fila
-| DELETE   | /v1/matches/queue    |  ✅ | Sair de uma fila
+| GET    | /v2/matches/{id} |  ✅ | Retornar uma única partida
+| GET    | /v2/matches/me |  ✅ | Retornar Todas as Partidas de um jogador
+| POST   | /v2/matches/queue |  ✅ | Entrar em uma fila
+| DELETE   | /v2/matches/queue    |  ✅ | Sair de uma fila
 
 ---
 
@@ -133,7 +133,7 @@ O projeto possui:
 ---
 
 # Casos de Uso
-> Nota: Esses são os casos de uso referentes à versão 1 do projeto.
+> Nota: Esses são os casos de uso referentes à versão 2 do projeto.
 
 ## JoinQueue
 Objetivo: Colocar o jogador em uma fila de espera;
