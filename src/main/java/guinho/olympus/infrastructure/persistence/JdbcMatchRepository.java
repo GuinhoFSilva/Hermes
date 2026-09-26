@@ -25,7 +25,7 @@ public class JdbcMatchRepository implements MatchQuery, MatchMutation {
     private final JdbcTemplate jdbcTemplate;
     private static final String SELECT_MATCH = "SELECT id, status, created_at, end_at FROM matches";
 
-    private RowMapper<Match> returnRowMapper(Participants participants) {
+    private RowMapper<Match> matchRowMapper(Participants participants) {
         return ((rs, rowNum) -> Match.reconstitute(
                 UUID.fromString(rs.getString("id")),
                 participants,
@@ -34,6 +34,17 @@ public class JdbcMatchRepository implements MatchQuery, MatchMutation {
                 rs.getObject("end_at", LocalDateTime.class)
         ));
     }
+
+    private final RowMapper<Match> matchRowMapper = ((rs, rowNum) -> Match.reconstitute(
+            UUID.fromString(rs.getString("match_id")),
+            Participants.of(
+                    PlayerId.of(UUID.fromString(rs.getString("first_player_id"))),
+                    PlayerId.of(UUID.fromString(rs.getString("second_player_id")))
+            ),
+            Status.valueOf(rs.getString("status")),
+            rs.getTimestamp("created_at").toLocalDateTime(),
+            rs.getObject("end_at", LocalDateTime.class)
+    ));
 
     public JdbcMatchRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -60,7 +71,7 @@ public class JdbcMatchRepository implements MatchQuery, MatchMutation {
     public Match update(Match match) {
         int rows = jdbcTemplate.update("UPDATE matches SET status = ?, endAt = ? WHERE id = ?", match.getStatus().toString(), match.getEndAt(), match.getId().toString());
 
-        if(rows == 0) throw new ResourceNotFoundException("Match not found");
+        if (rows == 0) throw new ResourceNotFoundException("Match not found");
 
         return match;
     }
@@ -69,22 +80,12 @@ public class JdbcMatchRepository implements MatchQuery, MatchMutation {
     public Optional<Match> findById(UUID id) {
         Participants participants = getParticipants(id);
 
-        return jdbcTemplate.query(SELECT_MATCH + " WHERE id = ?", returnRowMapper(participants), id.toString()).stream().findFirst();
+        return jdbcTemplate.query(SELECT_MATCH + " WHERE id = ?", matchRowMapper(participants), id.toString()).stream().findFirst();
     }
 
     @Override
     public List<Match> findByPlayerId(PlayerId playerId) {
-        List<UUID> matchesIds = jdbcTemplate.queryForList("SELECT m.id FROM matches m JOIN participants p ON p.id_match = m.id WHERE p.id_player = ?", UUID.class, playerId.getValue().toString());
-
-        // TODO: Replace with a single query that reconstructs aggregates to avoid the N+1 query
-
-        List<Match> matches = new ArrayList<>();
-        for (UUID matchId : matchesIds) {
-            Optional<Match> match = findById(matchId);
-            match.ifPresent(matches::add);
-        }
-
-        return matches;
+        return jdbcTemplate.query("SELECT m.id AS match_id, MAX(CASE WHEN p.id = (SELECT MIN(p2.id) FROM participants p2 WHERE p2.id_match = m.id ) THEN p.id_player END) AS first_player_id, MAX(CASE WHEN p.id = (SELECT MAX(p2.id) FROM participants p2 WHERE p2.id_match = m.id ) THEN p.id_player END) AS second_player_id, m.status, m.created_at, m.end_at FROM matches m JOIN participants p ON p.id_match = m.id WHERE EXISTS (SELECT 1 FROM participants p3 WHERE p3.id_match = m.id AND p3.id_player = ?) GROUP BY m.id, m.status, m.created_at, m.end_at", matchRowMapper, playerId.getValue().toString());
     }
 
     private Participants getParticipants(UUID matchId) {
