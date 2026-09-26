@@ -1,4 +1,4 @@
-# Hermes Matchmaking System (V1)
+# Hermes Matchmaking System (V2)
 
 ![Java](https://img.shields.io/badge/java-000000.svg?style=for-the-badge&logo=openjdk&logoColor=orange)
 ![JDBC](https://img.shields.io/badge/Jdbc-000000?style=for-the-badge&logo=openjdk&logoColor=orange)
@@ -242,9 +242,3 @@ Objetivo: Retornar informações de todas as partidas de um jogador específico.
 - Um jogador não pode consultar todas as partidas de outro jogador;
 
 ---
-
-# Roadmap V2
-- Resolver N + 1 do Select (findByPlayerId);
-- Remover o parsing manual do JWT (JwtTokenExtractor); ✅
-- Utiliza DI do Spring na configuração da SecretKey; ✅
-- Garantir atomicidade nas operações do Redis; ✅
