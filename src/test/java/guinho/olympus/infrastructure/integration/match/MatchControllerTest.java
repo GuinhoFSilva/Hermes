@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.hasSize;
 
 @IntegrationTest
 public class MatchControllerTest {
+    private static final String PATH = "/v2/matches";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -60,7 +62,7 @@ public class MatchControllerTest {
             String token = JwtTestFactory.generateToken(playerOne.getValue());
 
             mockMvc.perform(
-                            get("/v1/matches/" + saved.getId()).header("Authorization", "Bearer " + token))
+                            get(PATH + "/" + saved.getId()).header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.matchId").value(saved.getId().toString()))
                     .andExpect(jsonPath("$.participants.firstPlayerId").value(playerOne.getValue().toString()))
@@ -80,7 +82,7 @@ public class MatchControllerTest {
             String token = JwtTestFactory.generateToken(playerOne.getValue());
 
             mockMvc.perform(
-                            get("/v1/matches/me").header("Authorization", "Bearer " + token))
+                            get( PATH + "/me").header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(2)));
         }
@@ -91,7 +93,7 @@ public class MatchControllerTest {
             String token = JwtTestFactory.generateToken(playerId.getValue());
 
             mockMvc.perform(
-                            get("/v1/matches/me").header("Authorization", "Bearer " + token))
+                            get( PATH + "/me").header("Authorization", "Bearer " + token))
                     .andExpect(status().isNoContent());
         }
 
@@ -102,7 +104,7 @@ public class MatchControllerTest {
             Match saved = matchRepository.save(Match.create(Participants.of(playerOne, playerTwo)));
 
             mockMvc.perform(
-                            get("/v1/matches/" + saved.getId()))
+                            get(PATH + "/" + saved.getId()))
                     .andExpect(status().isUnauthorized());
         }
 
@@ -116,7 +118,7 @@ public class MatchControllerTest {
             String token = JwtTestFactory.generateToken(authenticatedPlayer.getValue());
 
             mockMvc.perform(
-                            get("/v1/matches/" + saved.getId()).header("Authorization", "Bearer " + token))
+                            get(PATH + "/" + saved.getId()).header("Authorization", "Bearer " + token))
                     .andExpect(status().isForbidden());
         }
     }
@@ -135,7 +137,7 @@ public class MatchControllerTest {
             String token = JwtTestFactory.generateToken(playerId.getValue());
 
             mockMvc.perform(
-                            post("/v1/matches/queue").header("Authorization", "Bearer " + token))
+                            post( PATH + "/queue").header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.hasMatch").value(false));
         }
@@ -150,7 +152,7 @@ public class MatchControllerTest {
             queueAdapter.joinQueue(playerOne);
 
             mockMvc.perform(
-                            post("/v1/matches/queue").header("Authorization", "Bearer " + token))
+                            post( PATH + "/queue").header("Authorization", "Bearer " + token))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.hasMatch").value(true));
         }
@@ -164,7 +166,7 @@ public class MatchControllerTest {
             queueAdapter.joinQueue(playerId);
 
             mockMvc.perform(
-                            delete("/v1/matches/queue").header("Authorization", "Bearer " + token))
+                            delete( PATH + "/queue").header("Authorization", "Bearer " + token))
                     .andExpect(status().isNoContent());
         }
 
@@ -175,7 +177,7 @@ public class MatchControllerTest {
             String token = JwtTestFactory.generateToken(playerId.getValue());
 
             mockMvc.perform(
-                            delete("/v1/matches/queue").header("Authorization", "Bearer " + token))
+                            delete( PATH + "/queue").header("Authorization", "Bearer " + token))
                     .andExpect(status().isConflict());
         }
     }

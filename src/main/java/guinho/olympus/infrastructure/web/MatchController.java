@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/matches")
+@RequestMapping("/v2/matches")
 public class MatchController {
     private final GetMatchUseCase getMatchUseCase;
     private final GetPlayerMatchesUseCase getPlayerMatchesUseCase;
