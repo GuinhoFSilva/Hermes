@@ -14,7 +14,22 @@
 ![repo size](https://img.shields.io/github/repo-size/GuinhoFSilva/hermes?style=for-the-badge&color=000000&labelColor=000000) 
 
 
-> O **Hermes Matchmaking (V1)** é o microsserviço de matchmaking do ecossistema Olympus.
+
+<div align="center">
+  
+```
+  █████   █████                                                    
+▒▒███   ▒▒███                                                     
+ ▒███    ▒███   ██████  ████████  █████████████    ██████   █████ 
+ ▒███████████  ███▒▒███▒▒███▒▒███▒▒███▒▒███▒▒███  ███▒▒███ ███▒▒  
+ ▒███▒▒▒▒▒███ ▒███████  ▒███ ▒▒▒  ▒███ ▒███ ▒███ ▒███████ ▒▒█████ 
+ ▒███    ▒███ ▒███▒▒▒   ▒███      ▒███ ▒███ ▒███ ▒███▒▒▒   ▒▒▒▒███
+ █████   █████▒▒██████  █████     █████▒███ █████▒▒██████  ██████ 
+▒▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒▒  ▒▒▒▒▒     ▒▒▒▒▒ ▒▒▒ ▒▒▒▒▒  ▒▒▒▒▒▒  ▒▒▒▒▒▒  
+```
+</div>
+
+> O **Hermes Matchmaking (V2)** é o microsserviço de matchmaking do ecossistema Olympus.
 > Nesta versão, recebe os jogadores em uma fila de espera e os agrupa automaticamente em partidas quando existem jogadores suficientes.
 
 ## Features
